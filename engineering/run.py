@@ -930,28 +930,47 @@ def run_all(verbose: bool = True,
         crane_cfg['pivot_y_m'] = max(0.0, local_half_beam - 0.75)
         cfg_dict = dict(cfg_dict)
         cfg_dict['Crane'] = crane_cfg
-    crane_check = _evaluate_crane_operation(
-        cfg_dict,
-        local_half_beam=local_half_beam,
-        m_total=m_total,
-        gm=GM,
-        v3_max_m3=v3_max_m3,
-        y_inner3=y_inner3,
-    )
-    if not crane_check.get('ok', False):
-        raise ValueError(
-            "Crane operation requirement failed: "
-            f"SWL deficit={crane_check.get('g_swl', 0.0):.2f} t, "
-            f"hook-height deficit={crane_check.get('g_hook', 0.0):.2f} m, "
-            f"heel exceedance={crane_check.get('g_heel', 0.0):.2f} deg, "
-            f"trim exceedance={crane_check.get('g_trim', 0.0):.2f} deg."
+    crane_swl_configured = float(crane_cfg.get('swl_max_t', 0.0))
+    crane_boom_configured = float(crane_cfg.get('boom_length_m', 0.0))
+    if crane_swl_configured > 0.0 and crane_boom_configured > 0.0:
+        crane_check = _evaluate_crane_operation(
+            cfg_dict,
+            local_half_beam=local_half_beam,
+            m_total=m_total,
+            gm=GM,
+            v3_max_m3=v3_max_m3,
+            y_inner3=y_inner3,
         )
-    if verbose:
-        print(
-            f"  Crane check OK: heel={crane_check['heel_deg']:.2f} deg, "
-            f"trim={crane_check['trim_deg']:.2f} deg, "
-            f"SWL eff={crane_check['swl_eff_t']:.1f} t @ angle {crane_check['required_angle_deg']:.1f} deg"
-        )
+        if not crane_check.get('ok', False):
+            raise ValueError(
+                "Crane operation requirement failed: "
+                f"SWL deficit={crane_check.get('g_swl', 0.0):.2f} t, "
+                f"hook-height deficit={crane_check.get('g_hook', 0.0):.2f} m, "
+                f"heel exceedance={crane_check.get('g_heel', 0.0):.2f} deg, "
+                f"trim exceedance={crane_check.get('g_trim', 0.0):.2f} deg."
+            )
+        if verbose:
+            print(
+                f"  Crane check OK: heel={crane_check['heel_deg']:.2f} deg, "
+                f"trim={crane_check['trim_deg']:.2f} deg, "
+                f"SWL eff={crane_check['swl_eff_t']:.1f} t @ angle {crane_check['required_angle_deg']:.1f} deg"
+            )
+    else:
+        crane_check = {
+            'ok': True, 'reason': 'no crane fitted',
+            'heel_deg': 0.0, 'trim_deg': 0.0,
+            'swl_eff_t': 0.0, 'swl_max_t': 0.0,
+            'required_angle_deg': 0.0,
+            'required_outreach_m': 0.0, 'actual_outreach_m': 0.0,
+            'required_hook_z_m': 0.0, 'hook_z_m': 0.0,
+            'required_lift_t': 0.0,
+            'heeling_moment_mnm': 0.0, 'compensation_moment_mnm': 0.0,
+            'residual_moment_mnm': 0.0, 'righting_5deg_mnm': 0.0,
+            'g_swl': 0.0, 'g_reach': 0.0, 'g_hook': 0.0,
+            'g_heel': 0.0, 'g_trim': 0.0, 'g_collision': 0.0,
+        }
+        if verbose:
+            print("  No crane fitted — skipping crane check.")
 
     # --- Resistance (Holtrop-Mennen 1984) ---
     if verbose:

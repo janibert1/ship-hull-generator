@@ -24,6 +24,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default="both",
         help="welke componenten meenemen: both (standaard), crane-only (geen TPs), tps-only (geen kraan)",
     )
+    parser.add_argument(
+        "--plot-mode",
+        choices=["auto", "ondemand", "none"],
+        default="auto",
+        help="visualisatie tijdens optimalisatie: auto (elke generatie), ondemand (Enter=toon hull), none (geen plot)",
+    )
     return parser
 
 
@@ -58,6 +64,7 @@ def main(argv: list[str] | None = None) -> int:
             n_threads=args.threads,
             min_tps=max(0, int(args.min_tps)),
             ship_mode=args.ship_mode,
+            plot_mode=args.plot_mode,
         )
     except KeyboardInterrupt:
         print("\nAfgebroken door gebruiker.")

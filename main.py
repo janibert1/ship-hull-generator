@@ -194,6 +194,15 @@ def menu():
             mapping = {"1": "both", "2": "crane-only", "3": "tps-only"}
             return mapping.get(raw, "both")
 
+        def ask_plot_mode() -> str:
+            print("\n  Visualisatie tijdens optimalisatie:")
+            print("  1. Automatisch — toon hull elke generatie (standaard)")
+            print("  2. Op aanvraag — druk Enter in terminal om hull te tonen")
+            print("  3. Uit — geen live plot")
+            raw = input("  Kies modus [default 1]: ").strip()
+            mapping = {"1": "auto", "2": "ondemand", "3": "none"}
+            return mapping.get(raw, "auto")
+
         while True:
             print("\n" + "-"*50)
             print("  OPTIMALISATIE MENU (Apex Architect)")
@@ -211,19 +220,21 @@ def menu():
                 try:
                     min_tps = ask_min_tps(default=0)
                     ship_mode = ask_ship_mode()
+                    plot_mode = ask_plot_mode()
                 except ValueError:
                     print(">>> Ongeldige invoer: minimum transition pieces moet een geheel getal zijn.")
                     continue
-                subprocess.run([sys.executable, str(pad / "itereer.py"), "--quick", "--min-tps", str(min_tps), "--ship-mode", ship_mode])
+                subprocess.run([sys.executable, str(pad / "itereer.py"), "--quick", "--min-tps", str(min_tps), "--ship-mode", ship_mode, "--plot-mode", plot_mode])
                 return
             if keuze_opt == "2":
                 try:
                     min_tps = ask_min_tps(default=0)
                     ship_mode = ask_ship_mode()
+                    plot_mode = ask_plot_mode()
                 except ValueError:
                     print(">>> Ongeldige invoer: minimum transition pieces moet een geheel getal zijn.")
                     continue
-                subprocess.run([sys.executable, str(pad / "itereer.py"), "--min-tps", str(min_tps), "--ship-mode", ship_mode])
+                subprocess.run([sys.executable, str(pad / "itereer.py"), "--min-tps", str(min_tps), "--ship-mode", ship_mode, "--plot-mode", plot_mode])
                 return
             if keuze_opt == "3":
                 try:
@@ -233,6 +244,7 @@ def menu():
                     threads = input("Threads [default 8]: ").strip()
                     min_tps = ask_min_tps(default=0)
                     ship_mode = ask_ship_mode()
+                    plot_mode = ask_plot_mode()
 
                     cmd = [sys.executable, str(pad / "itereer.py")]
                     if pop:
@@ -245,6 +257,7 @@ def menu():
                         cmd += ["--threads", str(int(threads))]
                     cmd += ["--min-tps", str(min_tps)]
                     cmd += ["--ship-mode", ship_mode]
+                    cmd += ["--plot-mode", plot_mode]
 
                     quick = input("Quick mode gebruiken? (j/n, default n): ").strip().lower()
                     if quick in ("j", "ja", "y", "yes"):

@@ -493,10 +493,13 @@ def evaluate_one_unit(u: np.ndarray, ctx: DesignContext, min_tps: int = 0, ship_
 
         # tps-only mode: remove crane mass, VCG, and suppress crane in config so
         # the 3D renderer (which checks swl_max_t > 0) does not draw a crane.
+        # Setting boom_length_m=0 also prevents _structural_mass in run_all from
+        # computing a phantom crane mass via the TP-weight heuristic.
         if _no_crane:
             m_crane_kg = 0.0
             vcg_crane = 0.0
             crane["swl_max_t"] = 0.0
+            crane["boom_length_m"] = 0.0
             cd["Crane"] = crane
 
         # Sort TPs by distance from LCB: partial selections cluster near buoyancy centre,

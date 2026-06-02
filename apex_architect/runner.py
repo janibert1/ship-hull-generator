@@ -355,6 +355,7 @@ def run(
     n_threads: int,
     min_tps: int = 0,
     ship_mode: str = "both",
+    plot_mode: str = "auto",
 ) -> int:
     if ctx.n_var != N_VAR:
         print(f"FOUT: bounds mismatch. verwacht {N_VAR}, kreeg {ctx.n_var}")
@@ -375,7 +376,7 @@ def run(
         sampling[:k, :] = np.clip(anchors[:k, :], 0.0, 1.0)
     problem = ApexArchitectProblem(ctx=ctx, n_threads=n_threads, min_tps=min_tps, ship_mode=ship_mode)
     algorithm = NSGA2(pop_size=pop_size, sampling=sampling, eliminate_duplicates=True)
-    hv_cb = HypervolumeEarlyStopCallback(ctx=ctx, live_plot=True)
+    hv_cb = HypervolumeEarlyStopCallback(ctx=ctx, live_plot=True, plot_mode=plot_mode)
 
     t0 = time.time()
     try:
