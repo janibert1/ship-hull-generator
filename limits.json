@@ -1,0 +1,17 @@
+{
+  "Length_Loa_m": [40, 120],
+  "Breadth_Boa_m": [12, 24],
+  "Depth_Doa_m": [5, 14],
+  "Lpp_Loa_ratio": [0.87, 0.97],
+  "MidshipLength_pct_Lpp": [20, 55],
+  "Location_midship_pct_Lpp": [40, 60],
+  "Bilge_Radius_m": [0.3, 4.5],
+  "Aft_Shoulder_pct": [60, 98],
+  "Fwd_Shoulder_pct": [20, 65],
+  "Bow_Rounding_deg": [15, 75],
+  "Location_bow_intermediate_curve_pct": [40, 80],
+  "Hull_Thickness_mm": [8, 25],
+  "Tank2_Length_pct_Loa": [20, 70],
+  "Side_Flare_deg": [0, 20],
+  "Side_Flare_Rotation_Point": [0, 1]
+}

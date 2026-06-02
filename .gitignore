@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated output
+engineering/output/
+engineering/Data/
+
+# Optimizer artefacts (generated at runtime)
+optim_results.json
+optim_checkpoint.json
+optim_rapport_rank1.txt
+optim_rapport_rank2.txt
+_optim_live_plot_config.json
+
+# Backup / scratch files
+config.__bak_*.json
+*.bak
+
+# AI assistant internal files
+CLAUDE.md
+GEMINI.md
+handoff.md
+plan.md
+changes.md
+
+# Large/external reference files
+Resistance*/
+*.pdf
+
+# Other group reference data (not part of this tool)
+groep10/
+groep10_backup/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
